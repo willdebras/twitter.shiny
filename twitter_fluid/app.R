@@ -27,7 +27,7 @@ ui <- fluidPage(
     column(3, 
            shinyjs::useShinyjs(),
            br(),
-           id = "side-panel",
+           id = "side-panel2",
            textInput("mytext2", "Enter a set of URL keywords", placeholder = "stellar debut votecast"),
            actionButton("add2" ,"Add")),
     column(8,
@@ -41,7 +41,7 @@ ui <- fluidPage(
     column(3, 
            shinyjs::useShinyjs(),
            br(),
-           id = "side-panel",
+           id = "side-panel3",
            textInput("mytext3", "Enter a URL", placeholder = "apnorc.org"),
            actionButton("add3" ,"Add")),
     column(8,
@@ -142,11 +142,11 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$add2, {
-    shinyjs::reset("side-panel")
+    shinyjs::reset("side-panel2")
   })
   
   observeEvent(input$add3, {
-    shinyjs::reset("side-panel")
+    shinyjs::reset("side-panel3")
   })
 }
 
