@@ -24,13 +24,13 @@ ui <- pageWithSidebar(
   
   mainPanel(
     h4("Terms"),
-    verbatimTextOutput("summary"),
+    verbatimTextOutput("text_term"),
     br(),
     br(),
     br(),
     br(),
     h4("URL terms"),
-    verbatimTextOutput("summary_urls"),
+    verbatimTextOutput("text_urlterm"),
     br(),
     br(),
     br(),
@@ -38,7 +38,7 @@ ui <- pageWithSidebar(
     br(),
     br(),
     h4("URLs"),
-    verbatimTextOutput("summary_url_key")
+    verbatimTextOutput("text_url")
   )
   
 )
@@ -112,15 +112,15 @@ server <- function(input, output, session) {
   
   ###Generate outputs that get displayed in verbatimTextOutput above
   
-  output$summary <- renderText({
+  output$text_term <- renderText({
     return(values())
   })
   
-  output$summary_urls <- renderText({
+  output$text_urlterm <- renderText({
     return(values2())
   })
   
-  output$summary_url_key <- renderText({
+  output$text_url <- renderText({
     return(values3())
   })
   
