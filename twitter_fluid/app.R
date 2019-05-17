@@ -59,7 +59,9 @@ ui <- fluidPage(
                column(11,
                       br(),
                       br(),
-                      h3("Twitter Syntax")
+                      h3("Twitter Syntax"),
+                      br(),
+                      verbatimTextOutput("rules")
                       
                )
              )  
@@ -77,7 +79,7 @@ server <- function(input, output, session) {
   
   ###First set of values for first input  
   
-  values <- reactiveVal("AP-NORC")
+  values <- reactiveVal(NULL)
   
   # update values table on button click
   observeEvent(input$add, {
@@ -88,7 +90,9 @@ server <- function(input, output, session) {
     
     
     # paste these together:
-    new_string <- paste(old_values, new_values, sep = ", ")
+    ifelse(!is.null(values()), 
+           new_string <- paste(old_values, new_values, sep = ", "), 
+           new_string <- paste(new_values))
     
     #store the result in values variable
     values(new_string)
@@ -154,6 +158,11 @@ server <- function(input, output, session) {
     return(values3())
   })
   
+  
+  output$rules <- renderText({
+    return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)"
+    ))
+  })
   
   ###Add JS functions to reset the input when you click the add button
   
