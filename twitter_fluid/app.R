@@ -89,7 +89,7 @@ server <- function(input, output, session) {
     new_values <- input$mytext
     
     
-    # paste these together:
+    # paste these together after first input:
     ifelse(!is.null(values()), 
            new_string <- paste(old_values, new_values, sep = ", "), 
            new_string <- paste(new_values))
