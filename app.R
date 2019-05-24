@@ -2,52 +2,84 @@ library(shiny)
 library(shinyjs)
 
 
-ui <- pageWithSidebar(
+ui <- fluidPage(
   
   headerPanel("Twitter rules drafter"),
   
-  sidebarPanel(
-    shinyjs::useShinyjs(),
-    id = "side-panel",
-    textInput("mytext", "Enter a search term", placeholder = "votecast"),
-    actionButton("add" ,"Add"),
-    tags$hr(),
-    br(),
-    textInput("mytext2", "Enter a set of URL keywords", placeholder = "stellar debut votecast"),
-    actionButton("add2" ,"Add"),
-    tags$hr(),
-    br(),
-    textInput("mytext3", "Enter a URL", placeholder = "apnorc.org"),
-    actionButton("add3" ,"Add")
-    #                 class = "btn btn-primary")
-  ),
-  
-  mainPanel(
-    h4("Terms"),
-    verbatimTextOutput("text_term"),
-    br(),
-    br(),
-    br(),
-    br(),
-    h4("URL terms"),
-    verbatimTextOutput("text_urlterm"),
-    br(),
-    br(),
-    br(),
-    br(),
-    br(),
-    br(),
-    h4("URLs"),
-    verbatimTextOutput("text_url")
+  tabsetPanel(
+    
+    tabPanel("Rules",
+             
+             fluidRow(
+               
+               column(3, 
+                      shinyjs::useShinyjs(),
+                      br(),
+                      id = "side-panel",
+                      textInput("mytext", "Enter a search term", placeholder = "votecast"),
+                      actionButton("add" ,"Add")),
+               column(8,
+                      h4("Terms"),
+                      verbatimTextOutput("text_term")
+               )
+               
+               
+             ),
+             
+             fluidRow(
+               
+               column(3, 
+                      shinyjs::useShinyjs(),
+                      br(),
+                      id = "side-panel2",
+                      textInput("mytext2", "Enter a set of URL keywords", placeholder = "stellar debut votecast"),
+                      actionButton("add2" ,"Add")),
+               column(8,
+                      h4("URL terms"),
+                      verbatimTextOutput("text_urlterm"))
+               
+             ),
+             
+             fluidRow(
+               
+               column(3, 
+                      shinyjs::useShinyjs(),
+                      br(),
+                      id = "side-panel3",
+                      textInput("mytext3", "Enter a URL", placeholder = "apnorc.org"),
+                      actionButton("add3" ,"Add")),
+               column(8,
+                      h4("URLs"),
+                      verbatimTextOutput("text_url"))
+               
+               
+             ),
+             
+             fluidRow(
+               column(11,
+                      br(),
+                      br(),
+                      h3("Twitter Syntax"),
+                      br(),
+                      verbatimTextOutput("rules")
+                      
+               )
+             )  
+    ),
+    tabPanel("Explanation",
+             br(),
+             "This app exists for the purpose of generating JSON syntax for search terms for the twitter firehose API. You simply add in search terms related to the release, add the phrases associated with URLs, and then finally add relevant URLs. The app will output syntax associated with the terms displayed in the right hand column."
+             
+    )
+    
   )
-  
 )
 
 server <- function(input, output, session) {
   
   ###First set of values for first input  
   
-  values <- reactiveVal("AP-NORC")
+  values <- reactiveVal(NULL)
   
   # update values table on button click
   observeEvent(input$add, {
@@ -57,8 +89,10 @@ server <- function(input, output, session) {
     new_values <- input$mytext
     
     
-    # paste these together:
-    new_string <- paste(old_values, new_values, sep = ", ")
+    # paste these together after first input:
+    ifelse(!is.null(values()), 
+           new_string <- paste(old_values, new_values, sep = ", "), 
+           new_string <- paste(new_values))
     
     #store the result in values variable
     values(new_string)
@@ -125,6 +159,11 @@ server <- function(input, output, session) {
   })
   
   
+  output$rules <- renderText({
+    return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)"
+    ))
+  })
+  
   ###Add JS functions to reset the input when you click the add button
   
   observeEvent(input$add, {
@@ -132,11 +171,11 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$add2, {
-    shinyjs::reset("side-panel")
+    shinyjs::reset("side-panel2")
   })
   
   observeEvent(input$add3, {
-    shinyjs::reset("side-panel")
+    shinyjs::reset("side-panel3")
   })
 }
 
