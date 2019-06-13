@@ -160,8 +160,10 @@ server <- function(input, output, session) {
   
   
   output$rules <- renderText({
-    return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)"
-    ))
+    return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
+           values(),
+           values2(),
+           values3()))
   })
   
   ###Add JS functions to reset the input when you click the add button
