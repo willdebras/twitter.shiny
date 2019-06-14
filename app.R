@@ -4,12 +4,13 @@ library(stringr)
 library(rclipboard)
 
 
+
+
 ui <- fluidPage(
   
   headerPanel("Twitter rules drafter"),
   
   tabsetPanel(
-    
     tabPanel("Rules",
              
              fluidRow(
@@ -22,7 +23,8 @@ ui <- fluidPage(
                       actionButton("add" ,"Add")),
                column(8,
                       h4("Terms"),
-                      verbatimTextOutput("text_term")
+                      verbatimTextOutput("text_term"),
+                      tags$style(type="text/css", "#text_term {white-space: pre-wrap;}")
                )
                
                
@@ -38,7 +40,8 @@ ui <- fluidPage(
                       actionButton("add2" ,"Add")),
                column(8,
                       h4("URL terms"),
-                      verbatimTextOutput("text_urlterm"))
+                      verbatimTextOutput("text_urlterm"),
+                      tags$style(type="text/css", "#text_urlterm {white-space: pre-wrap;}"))
                
              ),
              
@@ -52,7 +55,8 @@ ui <- fluidPage(
                       actionButton("add3" ,"Add")),
                column(8,
                       h4("URLs"),
-                      verbatimTextOutput("text_url"))
+                      verbatimTextOutput("text_url"),
+                      tags$style(type="text/css", "#text_url {white-space: pre-wrap;}"))
                
                
              ),
@@ -63,7 +67,8 @@ ui <- fluidPage(
                       br(),
                       h3("Twitter Syntax"),
                       br(),
-                      verbatimTextOutput("rules")
+                      verbatimTextOutput("rules"),
+                      tags$style(type="text/css", "#rules {white-space: pre-wrap;}")
                       
                )
              ),
