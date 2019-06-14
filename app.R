@@ -1,5 +1,6 @@
 library(shiny)
 library(shinyjs)
+library(stringr)
 
 
 ui <- fluidPage(
@@ -64,7 +65,13 @@ ui <- fluidPage(
                       verbatimTextOutput("rules")
                       
                )
-             )  
+             ),
+             fluidRow(
+               rclipboardSetup(),
+               column(11,
+                      br(),
+                      uiOutput("clip"))
+             )
     ),
     tabPanel("Explanation",
              br(),
@@ -96,6 +103,24 @@ server <- function(input, output, session) {
     
     #store the result in values variable
     values(new_string)
+    
+  })
+  
+  values_json <- reactiveVal(NULL)
+  
+  observeEvent(input$add, {
+    
+    first_json <- values()
+    
+    json1 <- strsplit(first_json, ",") 
+    
+    json2 <- as.vector(json1[[1]]) %>% trimws(which = "both")
+    
+    json3 <- sapply(json2, function(x) ifelse(str_detect(x, "[:blank:]"), paste("\\\"", x, "\\\"", sep = ""), paste(x)))
+    
+    
+    values_json(paste("(", paste(json3, sep = " ", collapse = " OR "), ")", sep = ""))
+    
     
   })
   
@@ -161,7 +186,7 @@ server <- function(input, output, session) {
   
   output$rules <- renderText({
     return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
-           values(),
+           values_json(),
            values2(),
            values3()))
   })
@@ -179,6 +204,28 @@ server <- function(input, output, session) {
   observeEvent(input$add3, {
     shinyjs::reset("side-panel3")
   })
+  
+  ###We want to allow a user to copy and paste these rules
+  
+  ##Make these data reactive since we can't read objects from the output above
+  
+  copyabledata <- reactive({
+    paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
+          values_json(),
+          values2(),
+          values3())
+  })
+  
+  ##Render the copy button
+  
+  output$clip <- renderUI({
+    rclipButton("clipbtn", "Copy rules", input$copytext, icon("clipboard"))
+  })
+  
+  ##observe the input and write to clipboard the copy-able data
+  
+  # Workaround for execution within RStudio
+  observeEvent(input$clipbtn, clipr::write_clip(copyabledata()))
 }
 
 shinyApp(ui, server)
