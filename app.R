@@ -163,7 +163,8 @@ server <- function(input, output, session) {
     json2_2 <- as.vector(json2_1[[1]]) %>% trimws(which = "both") %>%
       strsplit(" ")
     
-    json2_3 <- sapply(json2_2, function(x) paste("url_contains:", x, "OR", collapse = " "))
+    
+    json2_3 <- sapply(json2_2, function(x) paste(paste("url_contains:", x, sep = ""), "OR", collapse = " "))
     
     json2_4 <- sapply(json2_3, function(x) str_sub(x, 1, str_length(x)-3))
     
@@ -266,9 +267,9 @@ server <- function(input, output, session) {
   copyabledata <- reactive({
     paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
           values_json(),
-          " OR ",
+          "OR",
           values_json2(),
-          " OR ",
+          "OR",
           values_json3())
   })
   
