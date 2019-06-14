@@ -240,10 +240,9 @@ server <- function(input, output, session) {
   output$rules <- renderText({
     return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
                  values_json(),
-                 " OR ",
-                 values_json2(),
-                 " OR ",
-                 values_json3()))
+                 paste(ifelse(!is.null(values_json2()), paste("OR", values_json2()), "")),
+                 paste(ifelse(!is.null(values_json3()), paste("OR", values_json3()), ""))
+                 ))
   })
   
   ###Add JS functions to reset the input when you click the add button
@@ -267,10 +266,9 @@ server <- function(input, output, session) {
   copyabledata <- reactive({
     paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
           values_json(),
-          "OR",
-          values_json2(),
-          "OR",
-          values_json3())
+          paste(ifelse(!is.null(values_json2()), paste("OR", values_json2()), "")),
+          paste(ifelse(!is.null(values_json3()), paste("OR", values_json3()), ""))
+          )
   })
   
   ##Render the copy button
