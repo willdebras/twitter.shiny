@@ -169,8 +169,10 @@ server <- function(input, output, session) {
     
     json2_5 <- sapply(json2_4, function(x) paste("(", x, ")", sep = ""))
     
+    json2_6 <- paste(json2_5, sep = " ", collapse = " OR ")
     
-    values_json2(json2_5)
+    
+    values_json2(json2_6)
     
     
   })
@@ -198,6 +200,27 @@ server <- function(input, output, session) {
   })  
   
   
+  values_json3 <- reactiveVal(NULL)
+  
+  observeEvent(input$add3, {
+    
+    first_json3 <- values3()
+    
+    json3_1 <- strsplit(first_json3, ",")
+    
+    json3_2 <- as.vector(json3_1[[1]]) %>% trimws(which = "both")
+    
+    json3_3 <- test4 <- sapply(json3_2, function(x) paste("url_contains:", "\\\"", x, "\\\"", sep = ""))
+    
+    json3_4 <- paste(json3_3, sep = " ", collapse = " OR ")
+    
+    
+    values_json3(json3_4)
+    
+    
+  })
+  
+  
   ###Generate outputs that get displayed in verbatimTextOutput above
   
   output$text_term <- renderText({
@@ -215,9 +238,11 @@ server <- function(input, output, session) {
   
   output$rules <- renderText({
     return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
-           values_json(),
-           values_json2(),
-           values3(), sep = ""))
+                 values_json(),
+                 " OR ",
+                 values_json2(),
+                 " OR ",
+                 values_json3()))
   })
   
   ###Add JS functions to reset the input when you click the add button
@@ -241,8 +266,10 @@ server <- function(input, output, session) {
   copyabledata <- reactive({
     paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
           values_json(),
+          " OR ",
           values_json2(),
-          values3())
+          " OR ",
+          values_json3())
   })
   
   ##Render the copy button
