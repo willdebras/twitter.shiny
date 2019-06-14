@@ -152,6 +152,29 @@ server <- function(input, output, session) {
     
   })
   
+  values_json2 <- reactiveVal(NULL)
+  
+  observeEvent(input$add, {
+    
+    first_json2 <- values2()
+    
+    json2_1 <- strsplit(first_json2, ",") 
+    
+    json2_2 <- as.vector(json2_1[[1]]) %>% trimws(which = "both") %>%
+      strsplit(" ")
+    
+    json2_3 <- sapply(json2_2, function(x) paste("url_contains:", x, "OR", collapse = " "))
+    
+    json2_4 <- sapply(json2_3, function(x) str_sub(x, 1, str_length(x)-3))
+    
+    json2_5 <- sapply(json2_4, function(x) paste("(", x, ")", sep = ""))
+    
+    
+    values_json2(json2_5)
+    
+    
+  })
+  
   
   ###Third set of values for third input
   
@@ -193,7 +216,7 @@ server <- function(input, output, session) {
   output$rules <- renderText({
     return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
            values_json(),
-           values2(),
+           values_json2(),
            values3()))
   })
   
@@ -218,7 +241,7 @@ server <- function(input, output, session) {
   copyabledata <- reactive({
     paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
           values_json(),
-          values2(),
+          values_json2(),
           values3())
   })
   
