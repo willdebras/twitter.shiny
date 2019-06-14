@@ -154,7 +154,7 @@ server <- function(input, output, session) {
   
   values_json2 <- reactiveVal(NULL)
   
-  observeEvent(input$add, {
+  observeEvent(input$add2, {
     
     first_json2 <- values2()
     
@@ -217,7 +217,7 @@ server <- function(input, output, session) {
     return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
            values_json(),
            values_json2(),
-           values3()))
+           values3(), sep = ""))
   })
   
   ###Add JS functions to reset the input when you click the add button
