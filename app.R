@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(stringr)
+library(rclipboard)
 
 
 ui <- fluidPage(
