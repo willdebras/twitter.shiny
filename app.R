@@ -164,7 +164,7 @@ server <- function(input, output, session) {
       strsplit(" ")
     
     
-    json2_3 <- sapply(json2_2, function(x) paste(paste("url_contains:", x, sep = ""), "OR", collapse = " "))
+    json2_3 <- sapply(json2_2, function(x) paste(paste("url_contains:", x, sep = "", collapse = " "), "OR"))
     
     json2_4 <- sapply(json2_3, function(x) str_sub(x, 1, str_length(x)-3))
     
