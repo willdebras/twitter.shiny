@@ -2,6 +2,7 @@ library(shiny)
 library(shinyjs)
 library(stringr)
 library(rclipboard)
+library(utils)
 
 
 
@@ -283,7 +284,7 @@ server <- function(input, output, session) {
   ##observe the input and write to clipboard the copy-able data
   
   # Workaround for execution within RStudio
-  observeEvent(input$clipbtn, clipr::write_clip(copyabledata()))
+  observeEvent(input$clipbtn, writeClipboard(as.character(copyabledata())))
 }
 
 shinyApp(ui, server)
