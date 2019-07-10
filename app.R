@@ -240,6 +240,9 @@ server <- function(input, output, session) {
   output$rules <- renderText({
     return(paste("(\\\"ap-norc\\\" OR \\\"AP NORC\\\" OR apnorc OR \\\"Associated Press-NORC\\\") (poll OR survey)",
                  values_json(),
+                 "OR",
+                 "((\\\"AP poll\\\" OR \\\"AP survey\\\")",
+                 values_json(),
                  paste(ifelse(!is.null(values_json2()), paste("OR", values_json2()), "")),
                  paste(ifelse(!is.null(values_json3()), paste("OR", values_json3()), ""))
                  ))
