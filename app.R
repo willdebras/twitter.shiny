@@ -95,7 +95,7 @@ server <- function(input, output, session) {
   
   values <- reactiveVal(NULL)
   
-  # update values table on button click
+  # update values object on button click
   observeEvent(input$add, {
     
     old_values <- values()
