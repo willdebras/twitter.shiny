@@ -208,7 +208,7 @@ server <- function(input, output, session) {
     
     first_json3 <- values3()
     
-    json3_1 <- strsplit(first_json3, ",")
+    json3_1 <- strsplit(first_json3, ", ")
     
     json3_2 <- as.vector(json3_1[[1]]) %>% trimws(which = "both")
     
